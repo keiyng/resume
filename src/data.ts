@@ -32,7 +32,7 @@ export const data = {
             endDate: "2019-06-30",
             employmentType: "PART TIME",
             location: "Montclair, NJ",
-            achievements: [, "Develop an automatic data collection system using Python, Selenium, PhantomJS, and MySQL.","Manipulate social media text data to extract numeric features for machine learning.", "Implement NLP solutions and features engineering using scikit-learn, gensim, NLTK and so on.", "First author of 4 published research papers"]
+            achievements: ["Develop an automatic data collection system using Python, Selenium, PhantomJS, and MySQL.","Manipulate social media text data to extract numeric features for machine learning.", "Implement NLP solutions and features engineering using scikit-learn, gensim, NLTK and so on.", "First author of 4 published research papers"]
         }, 
         {
             id: "3",

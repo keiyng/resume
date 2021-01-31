@@ -1,14 +1,16 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Head from 'next/head'
 import {useQuery, gql} from "@apollo/client";
 import {format} from 'date-fns';
-import {print} from "graphql/language/printer"
+
+import {print} from "graphql/language/printer";
 import {Prism as SyntaxHighlighter} from "react-syntax-highlighter"
 import prismStyle from "react-syntax-highlighter/dist/cjs/styles/prism/xonokai"
 import styles from '../styles/Home.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEnvelope, faPhone } from '@fortawesome/free-solid-svg-icons'
-import { faGithub, faLinkedin } from '@fortawesome/free-brands-svg-icons'
+import { faGithub, faLinkedin } from '@fortawesome/free-brands-svg-icons';
+import {Button, Popover} from '@material-ui/core'
 
 const ResumeQuery = gql`
   query ResumeQuery {
@@ -54,6 +56,7 @@ const displaySkills = (skills) => {
 
 export default function Home() {
   const {data, error, loading} = useQuery(ResumeQuery);
+  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement| null>(null);
 
   if(loading) {
     return <div className={styles.loading}>
@@ -73,6 +76,15 @@ export default function Home() {
 
   const {bio, positions, education, skills} = data;
 
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
   return (
    <>
     <Head>
@@ -81,32 +93,21 @@ export default function Home() {
       <link rel="preconnect" href="https://fonts.gstatic.com" />
       <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;600&display=swap" rel="stylesheet" />
     </Head>
-    <header className={styles.header}>
-      <div>
-        <h1>{bio.name}</h1>
-        <p className={styles.tagline}>{bio.tagline}</p>
-      </div>
-      <div className={styles.contact}>
-        <div><FontAwesomeIcon icon={faPhone} />{' '}{bio.phone}</div>
-        <div><FontAwesomeIcon icon={faEnvelope} />{' '}<a href={`mailto:${bio.email}`}>{bio.email}</a></div>
-        <div><FontAwesomeIcon icon={faLinkedin} />{' '}<a href={bio.linkedin}>{bio.linkedin.replace("https://", "")}</a></div>
-        <div><FontAwesomeIcon icon={faGithub} />{' '}<a href={bio.github}>{bio.github.replace("https://", "")}</a></div>
-      </div>
-    </header>
-    <div className={styles.split}>
-      <div className={styles.left}>
-        <h2>Skills</h2>
-        <div className={styles.skills}>
-          <div><strong>Front End</strong>{" "}: {displaySkills(skills.frontEnd)}</div>
-          <div><strong>Back End</strong>{" "}: {displaySkills(skills.backEnd)}</div>
-          <div><strong>Database</strong>{" "}: {displaySkills(skills.database)}</div>
-          <div><strong>Others</strong>{" "}: {displaySkills(skills.others)}</div>
+    <div className={styles.container}>
+      <header className={styles.header}>
+        <div>
+          <h1>{bio.name}</h1>
+          <p className={styles.tagline}>{bio.tagline}</p>
         </div>
-        <SyntaxHighlighter language="graphql" style={prismStyle}>
-          {print(ResumeQuery)}
-        </SyntaxHighlighter>
-      </div>
-      <div className={styles.right}>
+        <div>
+          <div><FontAwesomeIcon icon={faPhone} />{' '}{bio.phone}</div>
+          <div><FontAwesomeIcon icon={faEnvelope} />{' '}<a href={`mailto:${bio.email}`}>{bio.email}</a></div>
+          <div><FontAwesomeIcon icon={faLinkedin} />{' '}<a href={bio.linkedin}>{bio.linkedin.replace("https://", "")}</a></div>
+          <div><FontAwesomeIcon icon={faGithub} />{' '}<a href={bio.github}>{bio.github.replace("https://", "")}</a></div>
+        </div>
+      </header>
+    <div className={styles.sections}>
+      <section>
         <h2>Experience</h2>
         {positions.map(position => {
           const length = [
@@ -128,6 +129,8 @@ export default function Home() {
             </ul>
           </div>)
         })}
+        </section>
+        <section>
         <h2>Education</h2>
         {education.map(edu => {
           return (
@@ -143,7 +146,39 @@ export default function Home() {
             <p>{edu.description}</p>
           </div>)
         })}
-      </div>
+      </section>
+      <section>
+        <h2>Skills</h2>
+        <div className={styles.skills}>
+          <div><strong>Front End</strong>{" "}: {displaySkills(skills.frontEnd)}</div>
+          <div><strong>Back End</strong>{" "}: {displaySkills(skills.backEnd)}</div>
+          <div><strong>Database</strong>{" "}: {displaySkills(skills.database)}</div>
+          <div><strong>Others</strong>{" "}: {displaySkills(skills.others)}</div>
+        </div>
+      </section>
+      <section>
+        <Button color="primary" variant="contained" onClick={handleClick}>See the GraphQL query for this resume</Button>
+        <Popover
+          open={Boolean(anchorEl)}
+          anchorEl={anchorEl}
+          onClose={handleClose}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'right',
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'left',
+          }}
+        >
+         <SyntaxHighlighter language="graphql" style={prismStyle}>
+          {print(ResumeQuery)}
+        </SyntaxHighlighter>
+      </Popover>
+        
+        
+      </section>
+    </div>
     </div>
    </>
   )
