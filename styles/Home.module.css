@@ -21,17 +21,22 @@
 }
 
 .header {
-  background-color: #0f755a;
-  color: white;
   display: flex;
-  padding: 1rem 2.5rem;
+  padding: 0rem 2.5rem;
   justify-content: space-between;
   align-items: center;
+}
+
+.header h1 {
+  color: #0f755a;
+  letter-spacing: 0.1rem;
+  margin-bottom: 0;
 }
 
 .tagline {
   word-wrap: break-word;
   width: 240px;
+  margin: 0;
 }
 
 .light {
@@ -52,7 +57,7 @@
 .sections h2,
 .sections h3,
 .sections h4 {
-  margin: 0.5rem 0;
+  margin: 0.3rem 0;
 }
 
 .sections h2 {

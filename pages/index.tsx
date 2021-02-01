@@ -8,9 +8,9 @@ import {Prism as SyntaxHighlighter} from "react-syntax-highlighter"
 import prismStyle from "react-syntax-highlighter/dist/cjs/styles/prism/xonokai"
 import styles from '../styles/Home.module.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEnvelope, faPhone } from '@fortawesome/free-solid-svg-icons'
+import { faEnvelope, faPhone, faEye } from '@fortawesome/free-solid-svg-icons'
 import { faGithub, faLinkedin } from '@fortawesome/free-brands-svg-icons';
-import {Button, Popover} from '@material-ui/core'
+import {Button, Popover, Divider} from '@material-ui/core'
 
 const ResumeQuery = gql`
   query ResumeQuery {
@@ -156,28 +156,25 @@ export default function Home() {
           <div><strong>Others</strong>{" "}: {displaySkills(skills.others)}</div>
         </div>
       </section>
-      <section>
-        <Button color="primary" variant="contained" onClick={handleClick}>See the GraphQL query for this resume</Button>
+      <Divider style={{margin: '1em 0'}}/>
+        <Button style={{margin: '1em 0'}}color="primary" onClick={handleClick}>See the GraphQL query of this resume<FontAwesomeIcon icon={faEye} /></Button>
         <Popover
           open={Boolean(anchorEl)}
           anchorEl={anchorEl}
           onClose={handleClose}
           anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'right',
+            vertical: 'top',
+            horizontal: 'center',
           }}
           transformOrigin={{
-            vertical: 'top',
-            horizontal: 'left',
+            vertical: 'bottom',
+            horizontal: 'center',
           }}
         >
          <SyntaxHighlighter language="graphql" style={prismStyle}>
           {print(ResumeQuery)}
         </SyntaxHighlighter>
       </Popover>
-        
-        
-      </section>
     </div>
     </div>
    </>
